@@ -1,44 +1,89 @@
 import React from 'react';
 import { Radar } from 'react-chartjs-2';
-import { Chart as ChartJS, RadialLinearScale, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+  Title
+} from 'chart.js';
 
-// Register chart.js components
-ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// Register Chart.js components
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, Title);
 
-const RadarChart = () => {
-  const data = {
-    labels: ['Testimony', 'Medical', 'Intake', 'Entity Relations', 'Trial', 'Disposition'],
+const RadarCharts = () => {
+  // Chart 1: Internal Team Performance
+  const teamData = {
+    labels: [
+      'Testimony Quality',
+      'Entity Linking',
+      'Medical Data Review',
+      'Trial Preparation',
+      'Deposition Readiness',
+      'Intake Analysis'
+    ],
     datasets: [
       {
         label: 'John Doe',
-        data: [80, 90, 70, 85, 60, 95],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Blue (lighter)
-        borderColor: 'rgba(54, 162, 235, 1)', // Blue (darker)
+        data: [85, 70, 90, 75, 80, 95],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 2,
       },
       {
-        label: 'Jane Roe',
-        data: [70, 85, 60, 80, 50, 90],
-        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Green (lighter)
-        borderColor: 'rgba(75, 192, 192, 1)', // Green (darker)
+        label: 'Attorney Carl',
+        data: [80, 60, 88, 82, 77, 85],
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
         borderWidth: 2,
       },
     ],
   };
 
-  const options = {
+  // Chart 2: Opposition Analysis
+  const oppositionData = {
+    labels: [
+      'Deposition Strength',
+      'Evidence Submitted',
+      'Medical Documentation',
+      'Legal Representation',
+      'Witness Reliability',
+      'Consistency',
+      'Trial Preparedness',
+    ],
+    datasets: [
+      {
+        label: 'John Doe (Plaintiff)',
+        data: [80, 75, 85, 70, 78, 82, 90],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 2,
+      },
+      {
+        label: 'Jane Roe (Defendant)',
+        data: [75, 70, 80, 88, 82, 79, 85],
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        borderColor: 'rgba(255, 206, 86, 1)',
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const options = (titleText) => ({
     responsive: true,
     plugins: {
       legend: {
         position: 'top',
         labels: {
           usePointStyle: true,
-          boxWidth: 12,
         },
       },
       title: {
         display: true,
-        // text: 'Case Document Strength Comparison',
+        text: titleText,
         font: {
           size: 18,
           weight: 'bold',
@@ -48,35 +93,51 @@ const RadarChart = () => {
     },
     scales: {
       r: {
-        angleLines: {
-          display: false,
-        },
         suggestedMin: 0,
         suggestedMax: 100,
+        angleLines: {
+          display: true,
+        },
         grid: {
-          color: '#f2f2f2',
+          color: '#e5e7eb',
+        },
+        pointLabels: {
+          font: {
+            size: 14,
+          },
         },
       },
     },
-  };
+  });
 
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-xl shadow-lg flex flex-col items-center gap-6">
-   
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <Radar data={data} />
-     
-    </div>
-     <a
-        href="https://legal-nexus-insight.vercel.app/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-300"
-      >
-        Go to Legal Nexus Insight
-      </a>
+    <div className="w-full max-w-6xl mx-auto p-2 flex flex-col gap-12">
+    
+      <div className="flex flex-wrap justify-center gap-6">
+        {/* Chart 1 - Left */}
+        <div className="bg-white p-6 rounded-2xl shadow-md" style={{ width: '500px', height: '500px' }}>
+          <Radar data={teamData} options={options('Plaintiff Legal Team Assessment')} />
+        </div>
+
+        {/* Chart 2 - Right */}
+        <div className="bg-white p-6 rounded-2xl shadow-md" style={{ width: '500px', height: '500px' }}>
+          <Radar data={oppositionData} options={options('Case Strength: Plaintiff vs Defendant')} />
+        </div>
+      </div>
+
+      {/* External Link */}
+      <div className="text-center">
+        <a
+          href="https://legal-nexus-insight.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+        >
+          Go to Legal Nexus Insight
+        </a>
+      </div>
     </div>
   );
 };
 
-export default RadarChart;
+export default RadarCharts;
